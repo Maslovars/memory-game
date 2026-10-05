@@ -2,6 +2,7 @@ const CARD_VALUES = [1, 2, 3, 4, 5, 6, 7, 8];
 const TOTAL_PAIRS = CARD_VALUES.length;
 const TOTAL_CARDS = TOTAL_PAIRS * 2;
 const MISMATCH_DELAY = 1000;
+const ASSET_PATH = '../assets/';
 const STORAGE_KEY = 'memory-game-results';
 
 const state = {
@@ -127,7 +128,7 @@ function createFooter() {
     const footer = createElement(
         'footer',
         'app-footer',
-        'Find all 8 pairs in as few moves as possible.',
+        'Find all 8 pairs in the minimum number of moves.',
     );
     return footer;
 }
@@ -161,9 +162,11 @@ function createModal() {
 
     const closeButton = createButton({
         className: 'icon-button',
-        text: '×',
         ariaLabel: 'Close modal',
     });
+    const closeIcon = createElement('span', 'icon-button__icon');
+    closeIcon.setAttribute('aria-hidden', 'true');
+    closeButton.append(closeIcon);
 
     modalHeader.append(title, closeButton);
 
@@ -247,13 +250,25 @@ function createCard(cardData) {
     const front = createElement(
         'span',
         'memory-card__face memory-card__face--front',
-        String(cardData.value),
     );
+    const frontImage = createElement('img', 'memory-card__image');
+    frontImage.src = `${ASSET_PATH}car${cardData.value}.jpg`;
+    frontImage.alt = `Car ${cardData.value}`;
+    frontImage.loading = 'eager';
+    frontImage.draggable = false;
+    front.append(frontImage);
+
     const back = createElement(
         'span',
         'memory-card__face memory-card__face--back',
-        '?',
     );
+    const backImage = createElement('img', 'memory-card__image');
+    backImage.src = `${ASSET_PATH}card-back.jpg`;
+    backImage.alt = '';
+    backImage.setAttribute('aria-hidden', 'true');
+    backImage.loading = 'eager';
+    backImage.draggable = false;
+    back.append(backImage);
 
     inner.append(front, back);
     card.append(inner);
@@ -287,9 +302,10 @@ function setCardOpen(cardId, isOpen) {
     }
 
     cardElement.classList.toggle('memory-card--open', isOpen);
+    const cardData = findCardData(cardId);
     cardElement.setAttribute(
         'aria-label',
-        isOpen ? `Card ${findCardData(cardId).value}` : 'Hidden card',
+        isOpen ? `Car ${cardData.value}` : 'Hidden card',
     );
 }
 
@@ -300,11 +316,9 @@ function setCardMatched(cardId) {
         return;
     }
 
+    const cardData = findCardData(cardId);
     cardElement.classList.add('memory-card--matched');
-    cardElement.setAttribute(
-        'aria-label',
-        `Matched card ${findCardData(cardId).value}`,
-    );
+    cardElement.setAttribute('aria-label', `Matched car ${cardData.value}`);
 }
 
 function updateStats() {
