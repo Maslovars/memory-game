@@ -2,7 +2,7 @@ const CARD_VALUES = [1, 2, 3, 4, 5, 6, 7, 8];
 const TOTAL_PAIRS = CARD_VALUES.length;
 const TOTAL_CARDS = TOTAL_PAIRS * 2;
 const MISMATCH_DELAY = 1000;
-const ASSET_PATH = '../assets/';
+const ASSET_PATH = './assets/';
 const STORAGE_KEY = 'memory-game-results';
 
 const state = {
